@@ -1,0 +1,19 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/to_do_tasks
+    username: JK_Credentials
+    password: Database_2003
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  security:
+    user:
+      name: Admin
+  thymeleaf:
+    cache: false
+
+server:
+  error:
+    include-message: always
