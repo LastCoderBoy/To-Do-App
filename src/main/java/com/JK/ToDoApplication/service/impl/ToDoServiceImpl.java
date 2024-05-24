@@ -32,14 +32,9 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public void createTask(ToDoTask toDoTask) {
-
-        ToDoTask tempTodo = new ToDoTask();
-        tempTodo.setCreatedAt(Instant.now());
-        tempTodo.setIsComplete(false);
-        tempTodo.setDescription(toDoTask.getDescription());
-
-        toDoRepository.save(tempTodo);
-
+        toDoTask.setCreatedAt(Instant.now());
+        toDoTask.setIsComplete(false);
+        toDoRepository.save(toDoTask);
     }
 
     @Override
@@ -58,7 +53,7 @@ public class ToDoServiceImpl implements ToDoService {
         if(taskToBeUpdatedOptional.isPresent()){
             ToDoTask taskToBeUpdated = taskToBeUpdatedOptional.get();
             taskToBeUpdated.setDescription(task.getDescription());
-            taskToBeUpdated.setIsComplete(task.getIsComplete());
+            taskToBeUpdated.setIsComplete(true);
             taskToBeUpdated.setUpdatedAt(Instant.now()); // Update the timestamp
             return toDoRepository.save(taskToBeUpdated);
         } else {

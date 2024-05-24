@@ -34,11 +34,13 @@ public class TaskController {
 
     @PostMapping("/addTask")
     public String createTask(@ModelAttribute("task") ToDoTask task, Model model) {
+        ToDoTask tempTask = new ToDoTask();
+        tempTask.setDescription(task.getDescription());
         if (task.getDescription() == null || task.getDescription().isEmpty()) {
             model.addAttribute("errorMessage", "Description is required");
             return "index"; // Return to the form if the description is missing
         }
-        toDoService.createTask(task);
+        toDoService.createTask(tempTask);
         return "redirect:/";
     }
 
@@ -54,7 +56,7 @@ public class TaskController {
         return "redirect:/";
     }
 
-    @PostMapping("/tasks/{id}")
+    @PutMapping("/tasks/{id}")
     public String updateTask(@PathVariable Long id,
                                 @ModelAttribute("ToDoTask") ToDoTask task,
                                 Model model) {
@@ -63,7 +65,7 @@ public class TaskController {
             return "redirect:/";
         } catch (RuntimeException e) {
             model.addAttribute("errorMessage", e.getMessage());
-            return "error"; // Assume there's an error.html template to display errors
+            return "error";
         }
     }
 }
