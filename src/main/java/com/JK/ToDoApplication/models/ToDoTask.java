@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @AllArgsConstructor
@@ -24,4 +25,34 @@ public class ToDoTask {
     private Instant updatedAt;
 
     public ToDoTask() {}
+
+    public ToDoTask(Long id, String description, Boolean isComplete, Instant createdAt) {
+        this.id = id;
+        this.description = description;
+        this.isComplete = isComplete;
+        this.createdAt = createdAt;
+    }
+
+    public ToDoTask(Long id, String description) {
+        this.id = id;
+        this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ToDoTask toDoTask = (ToDoTask) o;
+        return isComplete == toDoTask.isComplete &&
+                Objects.equals(id, toDoTask.id) &&
+                Objects.equals(description, toDoTask.description);
+        // Exclude updatedAt from equality check if necessary
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, description, isComplete);
+        // Exclude updatedAt from hash code calculation if necessary
+    }
+
 }

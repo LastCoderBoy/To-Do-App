@@ -4,6 +4,8 @@ import com.JK.ToDoApplication.models.ToDoTask;
 import com.JK.ToDoApplication.repository.ToDoRepository;
 import com.JK.ToDoApplication.service.ToDoService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -39,13 +41,26 @@ public class ToDoServiceImpl implements ToDoService {
 
     @Override
     public void deleteTask(Long id) {
-        toDoRepository.deleteById(id);
+        if (id == null) {
+            throw new IllegalArgumentException("Task ID cannot be null");
+        }
+        try {
+            toDoRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new IllegalStateException("Task not found with ID: " + id);
+        }
     }
+
 
     @Override
     public void deleteAllTask() {
-        toDoRepository.deleteAll();
+        try {
+            toDoRepository.deleteAll();
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Failed to delete all tasks", e);
+        }
     }
+
 
     @Override
     public ToDoTask updateTask(ToDoTask task, Long ID) {
