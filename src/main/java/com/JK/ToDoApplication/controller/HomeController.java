@@ -22,7 +22,8 @@ public class HomeController {
     public String index(Model model){
         try {
             List<ToDoTask> toDoTaskList = toDoService.getAllTasks();
-            model.addAttribute("index", toDoTaskList);
+            model.addAttribute("taskLists", toDoTaskList);
+            model.addAttribute("task", new ToDoTask());
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return "error";

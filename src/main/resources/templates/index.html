@@ -1,10 +1,60 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>All Tasks</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TODO LIST</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/style.css" type="text/css">
 </head>
+
 <body>
+
+<div class="container">
+    <h1>Todo List</h1>
+
+    <form th:action="@{/api/v1/hometask/addTask}" th:object="${task}" method="post">
+        <div class="input-container">
+            <input type="text" placeholder="Add a new task" id="description" th:field="*{description}" class="todo-input">
+            <button type="submit" class="add-button">
+                <i class="fa fa-plus-circle"></i>
+            </button>
+        </div>
+    </form>
+
+    <div class="filters">
+        <div>
+            <a class="filter" th:href="@{/api/v1/hometask/complete}">Complete</a>
+            <a class="filter" th:href="@{/api/v1/hometask/incomplete}">Incomplete</a>
+        </div>
+        <form th:action="@{/api/v1/hometask/del/all}" method="post">
+            <input type="hidden" name="_method" value="delete"/>
+            <button type="submit" class="delete-all">Delete All</button>
+        </form>
+    </div>
+
+    <div class="todos-container">
+        <ul class="todos">
+            <li class="todo" th:each="task : ${taskLists}" th:classappend="${task.isComplete} ? 'list-group-item-success'">
+                <form th:action="@{/api/v1/hometask/tasks/{id} (id=${task.id})}" method="POST" class="d-flex align-items-center w-100">
+                    <input type="hidden" name="_method" value="put"/>
+                    <input type="hidden" name="id" th:value="${task.id}"/>
+                    <input type="hidden" name="description" th:value="${task.description}"/>
+                    <input type="hidden" name="isComplete" th:value="${task.isComplete}"/>
+                    <input type="checkbox" th:id="'task' + ${task.id}" th:checked="${task.isComplete}" onchange="this.form.submit()" class="custom-checkbox">
+                    <label th:for="'task' + ${task.id}" th:text="${task.description}">
+                        <span></span>
+                    </label>
+                </form>
+                <a class="delete-btn" th:href="@{'/api/v1/hometask/del/'+${task.id}}" type="button"><i class="fa fa-trash"></i></a>
+            </li>
+        </ul>
+        <div class="text-center mt-3" th:if="${#lists.isEmpty(taskLists)}">
+            <img class="img-fluid" src="/empty.svg" alt="Empty image placeholder">
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

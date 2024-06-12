@@ -32,6 +32,11 @@ public class ToDoServiceImpl implements ToDoService {
         return toDoRepository.findToDoTaskByIsComplete(false);
     }
 
+    public ToDoTask getTaskById(Long id) {
+        return toDoRepository.findById(id).orElse(null);
+    }
+
+
     @Override
     public void createTask(ToDoTask toDoTask) {
         toDoTask.setCreatedAt(Instant.now());
